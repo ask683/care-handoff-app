@@ -7,7 +7,7 @@ import { useAuth } from "../AuthContext";
 import { faqShortcuts } from "../data/knowledgeBase";
 
 export default function Chat() {
-  const { messages, askQuestion } = useChat();
+  const { messages, askQuestion, resetChat } = useChat();
   const { currentStaff, canEdit } = useAuth();
   const [input, setInput] = useState("");
   const scrollRef = useRef(null);
@@ -29,7 +29,7 @@ export default function Chat() {
 
   return (
     <>
-      <Header title="AIチャット相談" showBack={true} />
+      <Header title="AIチャット相談" showBack={true} onBack={resetChat} />
       <main className="app-main" style={{ paddingBottom: "8.5rem" }}>
         {canEdit && (
           <Link to="/admin/manuals" className="big-btn small secondary" style={{ marginBottom: "1rem", display: "block", textAlign: "center" }}>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国保連請求・利用者請求書 プロトタイプ</title>
+<style>
+  :root {
+    --bg: #fdf3f8;
+    --card-bg: #ffffff;
+    --border: #f6d9e8;
+    --accent: #ff9fc4;
+    --accent-dark: #ff7fb2;
+    --accent-soft: #ffe9f3;
+    --lavender: #d9c9f7;
+    --mint: #c8f2e6;
+    --text: #5c4a55;
+    --heading: #e0658f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    background: linear-gradient(120deg, #ffb8d9, var(--lavender));
+    color: #fff;
+    padding: 1.3rem 1.5rem;
+    box-shadow: 0 3px 10px rgba(224, 101, 143, 0.2);
+  }
+  header h1 { margin: 0; font-size: 1.3rem; letter-spacing: 0.02em; }
+  header h1::before { content: "🌷 "; }
+  main { max-width: 1000px; margin: 0 auto; padding: 1.8rem 1.5rem; }
+  section {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 1.4rem 1.7rem;
+    margin-bottom: 1.8rem;
+    box-shadow: 0 4px 14px rgba(224, 101, 143, 0.08);
+  }
+  section h2 {
+    margin-top: 0;
+    font-size: 1.05rem;
+    color: var(--heading);
+    border-bottom: 3px dashed var(--accent-soft);
+    padding-bottom: 0.6rem;
+  }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.85rem; border-radius: 12px; overflow: hidden; }
+  th, td { border-bottom: 1px solid var(--border); padding: 0.55rem 0.7rem; text-align: left; }
+  th { background: var(--accent-soft); color: var(--heading); font-weight: 600; }
+  tbody tr:nth-child(even) { background: #fffafd; }
+  tbody tr:hover { background: var(--mint); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  select, button, input[type="date"] {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    cursor: pointer;
+  }
+  input[type="date"] { cursor: text; border-radius: 10px; }
+  button.primary, #printBtn, #printBtn2 {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(255, 159, 196, 0.45);
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  button.primary:hover, #printBtn:hover, #printBtn2:hover { background: var(--accent-dark); transform: translateY(-1px); }
+  .toolbar { display: flex; gap: 0.8rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
+  .doc-panel {
+    border: 2px solid var(--accent-soft);
+    border-radius: 16px;
+    padding: 1.1rem 1.3rem;
+    margin-bottom: 1.1rem;
+    background: #fffdfe;
+  }
+  .doc-panel h3 { margin: 0 0 0.8rem; font-size: 0.95rem; color: var(--heading); }
+  .doc-panel h3::before { content: "🎀 "; }
+  .doc-fields { display: flex; gap: 1.2rem; align-items: flex-end; flex-wrap: wrap; }
+  .doc-fields label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.8rem; color: #9a7f8c; }
+  .doc-fields button.primary {
+    background: #fff;
+    color: var(--accent-dark);
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    padding: 0.5rem 1.8rem;
+    font-weight: bold;
+    box-shadow: none;
+  }
+  .doc-fields button.primary:hover { background: var(--accent); color: #fff; }
+  .invoice {
+    border: 2px dashed var(--accent-soft);
+    padding: 1.6rem;
+    border-radius: 16px;
+    margin-top: 1rem;
+    background: #fffdfe;
+  }
+  .invoice h3 { margin-top: 0; color: var(--heading); }
+  .invoice-total {
+    font-size: 1.15rem;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 0.9rem;
+    padding-top: 0.6rem;
+    border-top: 3px dashed var(--accent-soft);
+    color: var(--heading);
+  }
+  .note { font-size: 0.78rem; color: #b190a0; margin-top: 0.6rem; }
+  @media print {
+    body * { visibility: hidden; }
+    #printArea, #printArea *, #printArea2, #printArea2 * { visibility: visible; }
+    #printArea, #printArea2 { position: absolute; left: 0; top: 0; width: 100%; }
+    header, .toolbar, #csvSection, .doc-panel { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>国保連請求集計 ／ 利用者請求書・領収書 プロトタイプ</h1>
+</header>
+
+<main>
+
+  <section>
+    <h2>0. 支援記録(サービス提供状況)の日次入力</h2>
+    <p>毎日の「サービス提供の状況」を利用者ごとに記録します。ここで入力した内容が、下の集計・請求書に反映されます。</p>
+    <div class="toolbar">
+      <label>利用者:
+        <select id="dailyUserSelect"></select>
+      </label>
+    </div>
+    <div id="dailyStatusTableWrap" style="max-height: 340px; overflow-y: auto;"></div>
+    <p class="note">選択肢: 本入居 / 外泊始 / 外泊 / 外泊終 / 入院始 / 入院 / 入院終 / 体験(サンプルのため一部の日にランダムで割り当てています)</p>
+  </section>
+
+  <section>
+    <h2>3. 請求データ作成</h2>
+
+    <div class="doc-panel">
+      <h3>介護給付費・訓練等給付費等請求書・明細書</h3>
+      <div class="doc-fields">
+        <button class="primary" id="seikyuConfirmBtn">確認</button>
+      </div>
+    </div>
+
+    <div class="doc-panel">
+      <h3>サービス提供実績記録票</h3>
+      <div class="doc-fields">
+        <button class="primary" id="jissekiConfirmBtn">確認</button>
+      </div>
+    </div>
+
+    <div class="doc-panel">
+      <h3>利用者負担額一覧表</h3>
+      <div class="doc-fields">
+        <button class="primary" id="futanConfirmBtn">確認</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button id="printBtn2">印刷 / PDF出力</button>
+    </div>
+    <div id="printArea2"></div>
+  </section>
+
+  <section id="csvSection">
+    <h2>1. 国保連向け月次集計(CSVエクスポート)</h2>
+    <p>宿泊実績(日次)から、月間の「請求サービス日数」と「加算の算定回数」を利用者ごとに集計します。</p>
+    <div class="toolbar">
+      <label>対象年月:
+        <select id="yearMonthSelect"></select>
+      </label>
+      <button class="primary" id="exportCsvBtn">国保連向けCSVをダウンロード</button>
+    </div>
+    <div id="summaryTableWrap"></div>
+    <p class="note">※ 実際の国保連伝送CSVは自治体・サービス種別ごとにレイアウトが規定されています。ここでは「利用者×加算コード」を集計する下地のみを示しています。列構成は所定のフォーマットに合わせて調整してください。</p>
+  </section>
+
+  <section>
+    <h2>2. 利用者向け書類発行</h2>
+    <div class="toolbar">
+      <label>利用者:
+        <select id="userSelect"></select>
+      </label>
+    </div>
+
+    <div class="doc-panel">
+      <h3>代理受領通知書</h3>
+      <div class="doc-fields">
+        <label>印刷日<input type="date" id="daikouPrintDate"></label>
+        <label>受領日<input type="date" id="daikouReceiveDate"></label>
+        <button class="primary" id="daikouConfirmBtn">確認</button>
+      </div>
+    </div>
+
+    <div class="doc-panel">
+      <h3>利用者請求書、領収書</h3>
+      <div class="doc-fields">
+        <label>印刷日<input type="date" id="invoicePrintDate"></label>
+        <label>口座振替日<input type="date" id="invoiceTransferDate"></label>
+        <button class="primary" id="invoiceConfirmBtn">確認(請求書)</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button id="printBtn">印刷 / PDF出力</button>
+    </div>
+    <div id="printArea"></div>
+  </section>
+
+</main>
+
+<script>
+/* =========================================================
+   1. データ構造の定義(設計提案)
+   ========================================================= */
+
+// 利用者マスタ
+// certificateNo: 受給者証番号(自治体が発行する10桁の番号。サンプルのためダミー値)
+// unit: 建物内のユニット(生活単位)。サンプルのため3ユニットに適当に割り振り
+const units = ["ナカノ", "ネリマ", "ウエスト"];
+
+const users = [
+  { id: "U001", name: "田中 一郎", certificateNo: "0012345678", municipality: "練馬区",  burdenRate: 0.1, burdenCeiling: 9300, unit: units[0] },
+  { id: "U002", name: "鈴木 恵子", certificateNo: "0098765432", municipality: "小平市",  burdenRate: 0,   burdenCeiling: 0,    unit: units[1] },
+  { id: "U003", name: "佐藤 二郎", certificateNo: "0011223344", municipality: "世田谷区", burdenRate: 0.1, burdenCeiling: 9300, unit: units[2] },
+  { id: "U004", name: "高橋 由美", certificateNo: "0055667788", municipality: "渋谷区",  burdenRate: 0,   burdenCeiling: 0,    unit: units[0] },
+  { id: "U005", name: "伊藤 三郎", certificateNo: "0099001122", municipality: "調布市",  burdenRate: 0.1, burdenCeiling: 4600, unit: units[1] },
+  { id: "U006", name: "渡辺 直子", certificateNo: "0033445566", municipality: "豊島区",  burdenRate: 0,   burdenCeiling: 0,    unit: units[2] },
+  { id: "U007", name: "山本 四郎", certificateNo: "0077889900", municipality: "中野区",  burdenRate: 0.1, burdenCeiling: 9300, unit: units[0] },
+  { id: "U008", name: "中村 五郎", certificateNo: "0022446688", municipality: "江戸川区", burdenRate: 0,   burdenCeiling: 0,    unit: units[1] },
+  { id: "U009", name: "小林 陽子", certificateNo: "0013579246", municipality: "港区",   burdenRate: 0.1, burdenCeiling: 9300, unit: units[2] },
+  { id: "U010", name: "加藤 六郎", certificateNo: "0024681357", municipality: "清瀬市",  burdenRate: 0,   burdenCeiling: 0,    unit: units[0] },
+  { id: "U011", name: "吉田 加奈", certificateNo: "0035792468", municipality: "日野市",  burdenRate: 0.1, burdenCeiling: 4600, unit: units[1] },
+  { id: "U012", name: "山田 七郎", certificateNo: "0046813579", municipality: "板橋区",  burdenRate: 0,   burdenCeiling: 0,    unit: units[2] },
+];
+
+// 加算マスタ(サービスコード表に相当する簡易版)
+// category: "kokuho" = 国保連へ給付費として請求する加算 / "municipality" = 都加算など自治体への別請求
+const additionMaster = [
+  { code: "night_support",  name: "夜間支援体制加算", unitPrice: 26,  category: "kokuho" },
+  { code: "medical_coop",   name: "医療連携体制加算", unitPrice: 500, category: "kokuho" },
+  { code: "tokyo_addition", name: "都加算(重度者対応)", unitPrice: 1000, category: "municipality" },
+];
+
+// 給付費の1日あたり基本単位(サービス種別ごとに本来はマスタ管理)
+const DAILY_BASE_UNIT = 600; // 円換算済みの簡易値
+const UNIT_TO_YEN = 1; // 単位数を円に変換する係数(地域区分等で本来は変動)
+
+// サービス提供状況(日次のステータス)。この単位で毎日記録する運用を想定
+const SERVICE_STATUSES = ["本入居", "外泊始", "外泊", "外泊終", "入院始", "入院", "入院終", "体験"];
+
+// 給付費算定・実費発生の対象となる状況(本入居・体験のみサービス提供とみなす)
+function isBillableStatus(status) {
+  return status === "本入居" || status === "体験";
+}
+
+// 宿泊実績(日次) — 本来はDBの1テーブルに相当
+// status: その日のサービス提供状況(SERVICE_STATUSESのいずれか)
+// additions: その日算定した加算コードの配列 / mealCost, utilityCost: その日発生した実費(食費・光熱水費)
+function generateSampleStayRecords(yearMonth) {
+  const [y, m] = yearMonth.split("-").map(Number);
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const records = [];
+  for (const user of users) {
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = `${yearMonth}-${String(d).padStart(2, "0")}`;
+      let status = "本入居";
+      // サンプル: U004は月半ばに外泊、U006は月末に入院、U011は月初に体験、という想定で適当に混在させる
+      if (user.id === "U004" && d >= 10 && d <= 13) {
+        status = d === 10 ? "外泊始" : d === 13 ? "外泊終" : "外泊";
+      } else if (user.id === "U006" && d >= 20 && d <= 23) {
+        status = d === 20 ? "入院始" : d === 23 ? "入院終" : "入院";
+      } else if (user.id === "U011" && d <= 3) {
+        status = "体験";
+      }
+
+      const record = { userId: user.id, date, status, additions: [], mealCost: 0, utilityCost: 0 };
+
+      if (isBillableStatus(status)) {
+        const additions = ["night_support"];
+        if (d % 5 === 0) additions.push("medical_coop");
+        if (["U001", "U003", "U005", "U007", "U009", "U011"].includes(user.id)) additions.push("tokyo_addition"); // 重度者対応=都加算対象
+        record.additions = additions;
+        record.mealCost = 600;
+        record.utilityCost = 100;
+      }
+      records.push(record);
+    }
+  }
+  return records;
+}
+
+/* =========================================================
+   2. 国保連向け月次集計ロジック
+   ========================================================= */
+
+// 利用者×加算コードごとに「算定回数」を集計し、あわせて「請求サービス日数」も出す
+function aggregateMonthlyClaims(stayRecords, yearMonth) {
+  const byUser = {};
+  for (const user of users) {
+    byUser[user.id] = {
+      userId: user.id,
+      userName: user.name,
+      yearMonth,
+      billableDays: 0,      // 本入居として請求できる日数
+      experienceDays: 0,    // 体験利用日数(別区分で管理)
+      awayDays: 0,          // 外泊(始・終含む)日数
+      hospitalDays: 0,      // 入院(始・終含む)日数
+      additionCounts: {},   // { code: count }
+    };
+  }
+  for (const rec of stayRecords) {
+    const entry = byUser[rec.userId];
+    if (!entry) continue;
+    if (rec.status === "本入居") entry.billableDays += 1;
+    else if (rec.status === "体験") entry.experienceDays += 1;
+    else if (rec.status.startsWith("外泊")) entry.awayDays += 1;
+    else if (rec.status.startsWith("入院")) entry.hospitalDays += 1;
+
+    for (const code of rec.additions) {
+      entry.additionCounts[code] = (entry.additionCounts[code] || 0) + 1;
+    }
+  }
+  return Object.values(byUser);
+}
+
+// 集計結果を国保連向けCSV(下地)に変換する
+// 1行 = 利用者の基本サービス日数 or 利用者×加算の算定回数
+function claimsToCsv(summaries) {
+  const header = ["ユニット", "利用者番号", "受給者証番号", "利用者氏名", "対象年月", "項目種別", "サービスコード", "項目名", "回数(日数)"];
+  const rows = [header];
+
+  for (const s of summaries) {
+    const user = users.find(u => u.id === s.userId);
+    rows.push([user.unit, s.userId, user.certificateNo, s.userName, s.yearMonth, "基本サービス", "-", "請求サービス日数(本入居)", s.billableDays]);
+    if (s.experienceDays > 0) rows.push([user.unit, s.userId, user.certificateNo, s.userName, s.yearMonth, "体験利用", "-", "体験利用日数", s.experienceDays]);
+    if (s.awayDays > 0) rows.push([user.unit, s.userId, user.certificateNo, s.userName, s.yearMonth, "参考", "-", "外泊日数", s.awayDays]);
+    if (s.hospitalDays > 0) rows.push([user.unit, s.userId, user.certificateNo, s.userName, s.yearMonth, "参考", "-", "入院日数", s.hospitalDays]);
+    for (const [code, count] of Object.entries(s.additionCounts)) {
+      const master = additionMaster.find(a => a.code === code);
+      rows.push([
+        user.unit,
+        s.userId,
+        user.certificateNo,
+        s.userName,
+        s.yearMonth,
+        master?.category === "municipality" ? "自治体加算" : "給付費加算",
+        code,
+        master?.name ?? code,
+        count,
+      ]);
+    }
+  }
+  return rows.map(r => r.map(csvEscape).join(",")).join("\r\n");
+}
+
+function csvEscape(v) {
+  const s = String(v);
+  return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+/* =========================================================
+   3. 利用者向け請求書・領収書の計算ロジック
+   ========================================================= */
+
+function buildInvoice(userId, stayRecords, summaries, yearMonth) {
+  const user = users.find(u => u.id === userId);
+  const summary = summaries.find(s => s.userId === userId);
+  const userRecords = stayRecords.filter(r => r.userId === userId);
+
+  // 給付費の利用者負担額(サービス日数 × 基本単位 × 負担割合。上限月額でキャップ)
+  const rawBenefitCost = summary.billableDays * DAILY_BASE_UNIT * UNIT_TO_YEN;
+  let benefitBurden = Math.round(rawBenefitCost * user.burdenRate);
+  if (user.burdenCeiling > 0) benefitBurden = Math.min(benefitBurden, user.burdenCeiling);
+
+  // 都加算(自治体加算)は給付費の負担割合とは別に、利用者への直接請求として計算する運用を想定
+  const tokyoAdditionCount = summary.additionCounts["tokyo_addition"] || 0;
+  const tokyoAdditionMaster = additionMaster.find(a => a.code === "tokyo_addition");
+  const tokyoAdditionAmount = tokyoAdditionCount * (tokyoAdditionMaster?.unitPrice ?? 0);
+
+  // 実費(食費・光熱水費)
+  const mealTotal = userRecords.reduce((sum, r) => sum + (r.mealCost || 0), 0);
+  const utilityTotal = userRecords.reduce((sum, r) => sum + (r.utilityCost || 0), 0);
+  const actualExpenseTotal = mealTotal + utilityTotal;
+
+  const total = benefitBurden + tokyoAdditionAmount + actualExpenseTotal;
+
+  return {
+    user, yearMonth,
+    billableDays: summary.billableDays,
+    benefitBurden,
+    tokyoAdditionCount,
+    tokyoAdditionAmount,
+    mealTotal,
+    utilityTotal,
+    actualExpenseTotal,
+    total,
+  };
+}
+
+function yen(n) {
+  return n.toLocaleString("ja-JP") + " 円";
+}
+
+// その利用者の給付費請求額(国保連へ請求する額 = 基本サービス費 + 国保連向け加算。都加算等の自治体加算は含まない)
+function computeKokuhoClaimAmount(summary) {
+  let amount = summary.billableDays * DAILY_BASE_UNIT * UNIT_TO_YEN;
+  for (const [code, count] of Object.entries(summary.additionCounts)) {
+    const master = additionMaster.find(a => a.code === code);
+    if (master && master.category === "kokuho") amount += count * master.unitPrice;
+  }
+  return amount;
+}
+
+// 3-1. 介護給付費・訓練等給付費等請求書・明細書
+function renderSeikyusho() {
+  const ym = yearMonthSelect.value;
+  let rows = "";
+  let grandTotal = 0;
+  for (const s of currentSummaries) {
+    const user = users.find(u => u.id === s.userId);
+    const claimAmount = computeKokuhoClaimAmount(s);
+    grandTotal += claimAmount;
+    rows += `<tr><td>${user.unit}</td><td>${s.userName}</td><td>${user.certificateNo}</td><td class="num">${s.billableDays}日</td><td class="num">${yen(claimAmount)}</td></tr>`;
+  }
+  document.getElementById("printArea2").innerHTML = `
+    <div class="invoice">
+      <h3>介護給付費・訓練等給付費等請求書・明細書(${ym})</h3>
+      <p class="note">事業所名: サンプル事業所 ／ 事業所番号: 1234567890</p>
+      <table>
+        <tr><th>ユニット</th><th>利用者氏名</th><th>受給者証番号</th><th>本入居日数</th><th>給付費請求額</th></tr>
+        ${rows}
+      </table>
+      <div class="invoice-total">請求額合計: ${yen(grandTotal)}</div>
+    </div>
+  `;
+}
+
+// 3-2. サービス提供実績記録票(選択中の利用者の1か月分)
+function renderJisseki() {
+  const userId = userSelect.value;
+  const user = users.find(u => u.id === userId);
+  const records = currentStayRecords.filter(r => r.userId === userId).sort((a, b) => a.date.localeCompare(b.date));
+  const summary = currentSummaries.find(s => s.userId === userId);
+  let rows = "";
+  for (const rec of records) {
+    const day = rec.date.split("-")[2];
+    rows += `<tr><td>${day}日</td><td>${rec.status}</td></tr>`;
+  }
+  document.getElementById("printArea2").innerHTML = `
+    <div class="invoice">
+      <h3>サービス提供実績記録票(${yearMonthSelect.value})</h3>
+      <p>${user.name} 様(${user.unit} ／ 受給者証番号: ${user.certificateNo})</p>
+      <table>
+        <tr><th>日付</th><th>サービス提供の状況</th></tr>
+        ${rows}
+      </table>
+      <p class="note">本入居: ${summary.billableDays}日 ／ 体験: ${summary.experienceDays}日 ／ 外泊: ${summary.awayDays}日 ／ 入院: ${summary.hospitalDays}日</p>
+    </div>
+  `;
+}
+
+// 3-3. 利用者負担額一覧表(全利用者分)
+function renderFutanIchiran() {
+  const ym = yearMonthSelect.value;
+  let rows = "";
+  let grandTotal = 0;
+  for (const s of currentSummaries) {
+    const inv = buildInvoice(s.userId, currentStayRecords, currentSummaries, ym);
+    grandTotal += inv.total;
+    rows += `<tr><td>${inv.user.unit}</td><td>${inv.user.name}</td><td class="num">${yen(inv.benefitBurden)}</td><td class="num">${yen(inv.tokyoAdditionAmount)}</td><td class="num">${yen(inv.actualExpenseTotal)}</td><td class="num">${yen(inv.total)}</td></tr>`;
+  }
+  document.getElementById("printArea2").innerHTML = `
+    <div class="invoice">
+      <h3>利用者負担額一覧表(${ym})</h3>
+      <table>
+        <tr><th>ユニット</th><th>利用者氏名</th><th>給付費負担分</th><th>都加算</th><th>実費</th><th>合計</th></tr>
+        ${rows}
+      </table>
+      <div class="invoice-total">全利用者 合計: ${yen(grandTotal)}</div>
+    </div>
+  `;
+}
+
+/* =========================================================
+   4. 画面描画
+   ========================================================= */
+
+const yearMonthSelect = document.getElementById("yearMonthSelect");
+const userSelect = document.getElementById("userSelect");
+["2026-07", "2026-08", "2026-09"].forEach(ym => {
+  const opt = document.createElement("option");
+  opt.value = ym; opt.textContent = ym;
+  yearMonthSelect.appendChild(opt);
+});
+yearMonthSelect.value = "2026-09";
+
+users.forEach(u => {
+  const opt = document.createElement("option");
+  opt.value = u.id; opt.textContent = `[${u.unit}] ${u.name}(${u.municipality})`;
+  userSelect.appendChild(opt);
+});
+
+const dailyUserSelect = document.getElementById("dailyUserSelect");
+users.forEach(u => {
+  const opt = document.createElement("option");
+  opt.value = u.id; opt.textContent = `[${u.unit}] ${u.name}(${u.municipality})`;
+  dailyUserSelect.appendChild(opt);
+});
+
+let currentStayRecords = [];
+let currentSummaries = [];
+
+// ステータス変更に応じて、その日の加算・実費を再計算する(本入居/体験のみ発生させる)
+function applyStatusEffects(record) {
+  if (isBillableStatus(record.status)) {
+    const d = Number(record.date.split("-")[2]);
+    const additions = ["night_support"];
+    if (d % 5 === 0) additions.push("medical_coop");
+    if (["U001", "U003", "U005", "U007", "U009", "U011"].includes(record.userId)) additions.push("tokyo_addition");
+    record.additions = additions;
+    record.mealCost = 600;
+    record.utilityCost = 100;
+  } else {
+    record.additions = [];
+    record.mealCost = 0;
+    record.utilityCost = 0;
+  }
+}
+
+function renderDailyStatusTable(userId) {
+  const records = currentStayRecords
+    .filter(r => r.userId === userId)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  let html = "<table><thead><tr><th>日付</th><th>サービス提供の状況</th></tr></thead><tbody>";
+  for (const rec of records) {
+    const day = rec.date.split("-")[2];
+    html += `<tr><td>${day}日</td><td><select data-date="${rec.date}" data-user="${rec.userId}" class="statusSelect">`;
+    for (const status of SERVICE_STATUSES) {
+      html += `<option value="${status}" ${rec.status === status ? "selected" : ""}>${status}</option>`;
+    }
+    html += "</select></td></tr>";
+  }
+  html += "</tbody></table>";
+  const wrap = document.getElementById("dailyStatusTableWrap");
+  wrap.innerHTML = html;
+  wrap.querySelectorAll(".statusSelect").forEach(sel => {
+    sel.addEventListener("change", (e) => {
+      const { date, user } = e.target.dataset;
+      const rec = currentStayRecords.find(r => r.userId === user && r.date === date);
+      rec.status = e.target.value;
+      applyStatusEffects(rec);
+      currentSummaries = aggregateMonthlyClaims(currentStayRecords, yearMonthSelect.value);
+      renderSummaryTable(currentSummaries);
+      if (userSelect.value === user) renderInvoice(user);
+    });
+  });
+}
+
+function renderSummaryTable(summaries) {
+  const allCodes = additionMaster.map(a => a.code);
+  const sorted = [...summaries].sort((a, b) => {
+    const ua = users.find(u => u.id === a.userId);
+    const ub = users.find(u => u.id === b.userId);
+    return ua.unit.localeCompare(ub.unit, "ja") || a.userId.localeCompare(b.userId);
+  });
+  let html = "<table><thead><tr><th>ユニット</th><th>利用者</th><th>市区町村</th><th>本入居日数</th><th>体験日数</th><th>外泊日数</th><th>入院日数</th>";
+  for (const code of allCodes) {
+    const m = additionMaster.find(a => a.code === code);
+    html += `<th>${m.name}</th>`;
+  }
+  html += "</tr></thead><tbody>";
+  let prevUnit = null;
+  for (const s of sorted) {
+    const user = users.find(u => u.id === s.userId);
+    const showUnit = user.unit !== prevUnit;
+    prevUnit = user.unit;
+    html += `<tr><td>${showUnit ? user.unit : ""}</td><td>${s.userName}</td><td>${user.municipality}</td><td class="num">${s.billableDays}日</td><td class="num">${s.experienceDays}日</td><td class="num">${s.awayDays}日</td><td class="num">${s.hospitalDays}日</td>`;
+    for (const code of allCodes) {
+      html += `<td class="num">${s.additionCounts[code] || 0}回</td>`;
+    }
+    html += "</tr>";
+  }
+  html += "</tbody></table>";
+  document.getElementById("summaryTableWrap").innerHTML = html;
+}
+
+function formatJaDate(isoDate) {
+  if (!isoDate) return "(未入力)";
+  const d = new Date(isoDate + "T00:00:00");
+  return d.toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" });
+}
+
+function renderInvoice(userId, printDate, transferDate) {
+  const inv = buildInvoice(userId, currentStayRecords, currentSummaries, yearMonthSelect.value);
+  document.getElementById("printArea").innerHTML = `
+    <div class="invoice">
+      <h3>請求書 兼 領収書(${inv.yearMonth})</h3>
+      <p>${inv.user.name} 様</p>
+      <p class="note">印刷日: ${formatJaDate(printDate)} ／ 口座振替日: ${formatJaDate(transferDate)}</p>
+      <p class="note">受給者証番号: ${inv.user.certificateNo} ／ 支給決定市区町村: ${inv.user.municipality}</p>
+      <table>
+        <tr><th>項目</th><th class="num">内容</th><th class="num">金額</th></tr>
+        <tr><td>給付費 利用者負担分</td><td class="num">${inv.billableDays}日 利用(負担割合 ${inv.user.burdenRate * 100}%)</td><td class="num">${yen(inv.benefitBurden)}</td></tr>
+        <tr><td>都加算</td><td class="num">${inv.tokyoAdditionCount}回算定</td><td class="num">${yen(inv.tokyoAdditionAmount)}</td></tr>
+        <tr><td>実費(食費)</td><td class="num">-</td><td class="num">${yen(inv.mealTotal)}</td></tr>
+        <tr><td>実費(光熱水費)</td><td class="num">-</td><td class="num">${yen(inv.utilityTotal)}</td></tr>
+      </table>
+      <div class="invoice-total">合計ご請求額: ${yen(inv.total)}</div>
+      <p class="note">上記の通り領収いたしました。</p>
+    </div>
+  `;
+}
+
+// 代理受領通知書: 給付費のうち事業所が国保連から代理受領した額(=給付費全体 - 利用者負担額)を通知する書類
+function renderDaikouNotice(userId, printDate, receiveDate) {
+  const inv = buildInvoice(userId, currentStayRecords, currentSummaries, yearMonthSelect.value);
+  const rawBenefitCost = inv.billableDays * DAILY_BASE_UNIT * UNIT_TO_YEN;
+  const daikouAmount = rawBenefitCost - inv.benefitBurden;
+  document.getElementById("printArea").innerHTML = `
+    <div class="invoice">
+      <h3>代理受領通知書(${inv.yearMonth})</h3>
+      <p>${inv.user.name} 様</p>
+      <p class="note">印刷日: ${formatJaDate(printDate)} ／ 受領日: ${formatJaDate(receiveDate)}</p>
+      <p class="note">受給者証番号: ${inv.user.certificateNo} ／ 支給決定市区町村: ${inv.user.municipality}</p>
+      <p>下記の通り、貴殿に代わり給付費を代理受領いたしましたのでお知らせいたします。</p>
+      <table>
+        <tr><th>項目</th><th class="num">内容</th><th class="num">金額</th></tr>
+        <tr><td>給付費総額</td><td class="num">${inv.billableDays}日分</td><td class="num">${yen(rawBenefitCost)}</td></tr>
+        <tr><td>利用者負担額(控除)</td><td class="num">負担割合 ${inv.user.burdenRate * 100}%</td><td class="num">-${yen(inv.benefitBurden)}</td></tr>
+      </table>
+      <div class="invoice-total">事業所代理受領額: ${yen(daikouAmount)}</div>
+    </div>
+  `;
+}
+
+// 印刷日系の入力欄には今日の日付を初期値として入れておく
+const todayIso = new Date().toISOString().slice(0, 10);
+const daikouPrintDate = document.getElementById("daikouPrintDate");
+const daikouReceiveDate = document.getElementById("daikouReceiveDate");
+const invoicePrintDate = document.getElementById("invoicePrintDate");
+const invoiceTransferDate = document.getElementById("invoiceTransferDate");
+daikouPrintDate.value = todayIso;
+invoicePrintDate.value = todayIso;
+
+function refreshAll() {
+  const ym = yearMonthSelect.value;
+  currentStayRecords = generateSampleStayRecords(ym);
+  currentSummaries = aggregateMonthlyClaims(currentStayRecords, ym);
+  renderSummaryTable(currentSummaries);
+  document.getElementById("printArea").innerHTML = '<p class="note">上のボタンから発行する書類を選んで「確認」を押してください。</p>';
+  document.getElementById("printArea2").innerHTML = '<p class="note">上のボタンから確認したい帳票を選んでください。</p>';
+  renderDailyStatusTable(dailyUserSelect.value);
+}
+
+yearMonthSelect.addEventListener("change", refreshAll);
+dailyUserSelect.addEventListener("change", () => renderDailyStatusTable(dailyUserSelect.value));
+document.getElementById("printBtn").addEventListener("click", () => window.print());
+document.getElementById("daikouConfirmBtn").addEventListener("click", () => {
+  renderDaikouNotice(userSelect.value, daikouPrintDate.value, daikouReceiveDate.value);
+});
+document.getElementById("invoiceConfirmBtn").addEventListener("click", () => {
+  renderInvoice(userSelect.value, invoicePrintDate.value, invoiceTransferDate.value);
+});
+document.getElementById("printBtn2").addEventListener("click", () => window.print());
+document.getElementById("seikyuConfirmBtn").addEventListener("click", renderSeikyusho);
+document.getElementById("jissekiConfirmBtn").addEventListener("click", renderJisseki);
+document.getElementById("futanConfirmBtn").addEventListener("click", renderFutanIchiran);
+document.getElementById("exportCsvBtn").addEventListener("click", () => {
+  const csv = "﻿" + claimsToCsv(currentSummaries); // BOM付きでExcelでも文字化けしないように
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `国保連請求集計_${yearMonthSelect.value}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+refreshAll();
+</script>
+
+</body>
+</html>

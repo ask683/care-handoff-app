@@ -1,0 +1,14 @@
+{
+  "name": "グループホーム申し送り・利用者管理",
+  "short_name": "申し送りアプリ",
+  "description": "グループホーム向け利用者情報・申し送り管理アプリ",
+  "start_url": "/login",
+  "display": "standalone",
+  "background_color": "#fff8fb",
+  "theme_color": "#ff7aa8",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
