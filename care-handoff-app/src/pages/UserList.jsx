@@ -27,6 +27,9 @@ export default function UserList() {
     <>
       <Header title="利用者一覧" />
       <main className="app-main">
+        <Link to="/handoff/daily" className="big-btn" style={{ marginBottom: "1rem", display: "block", textAlign: "center" }}>
+          📝 今日の申し送りをまとめて書く
+        </Link>
         <div className="tabs">
           {["全員", ...units].map((u) => (
             <button

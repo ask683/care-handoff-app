@@ -15,6 +15,13 @@ export function DataProvider({ children }) {
     setHandoffRecords((prev) => [{ ...record, id: `H${Date.now()}` }, ...prev]);
   }
 
+  // 全利用者分をまとめて登録する(1件ずつ個別ページの履歴にも反映される)
+  function addHandoffBatch(records) {
+    const base = Date.now();
+    const withIds = records.map((record, i) => ({ ...record, id: `H${base}_${i}` }));
+    setHandoffRecords((prev) => [...withIds, ...prev]);
+  }
+
   function addIncident(record) {
     setIncidentRecords((prev) => [{ ...record, id: `I${Date.now()}` }, ...prev]);
   }
@@ -37,7 +44,7 @@ export function DataProvider({ children }) {
 
   return (
     <DataContext.Provider
-      value={{ users, handoffRecords, incidentRecords, addHandoff, addIncident, planDocuments, uploadPlanDocument }}
+      value={{ users, handoffRecords, incidentRecords, addHandoff, addHandoffBatch, addIncident, planDocuments, uploadPlanDocument }}
     >
       {children}
     </DataContext.Provider>

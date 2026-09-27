@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import UserList from "./pages/UserList";
 import UserDetail from "./pages/UserDetail";
 import HandoffForm from "./pages/HandoffForm";
+import DailyHandoff from "./pages/DailyHandoff";
 import IncidentForm from "./pages/IncidentForm";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
@@ -26,6 +27,7 @@ function AppRoutes({ fontScale, setFontScale }) {
       <Route path="/users" element={<RequireAuth><UserList /></RequireAuth>} />
       <Route path="/users/:userId" element={<RequireAuth><UserDetail /></RequireAuth>} />
       <Route path="/users/:userId/handoff/new" element={<RequireAuth><HandoffForm /></RequireAuth>} />
+      <Route path="/handoff/daily" element={<RequireAuth><DailyHandoff /></RequireAuth>} />
       <Route path="/users/:userId/incident/new" element={<RequireAuth><IncidentForm /></RequireAuth>} />
       <Route path="/history" element={<RequireAuth><History /></RequireAuth>} />
       <Route path="/chat" element={<RequireAuth><Chat /></RequireAuth>} />
