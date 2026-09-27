@@ -1,8 +1,8 @@
 // サンプルデータ(実データ接続前のUI確認用。氏名・情報はすべて架空です)
 
 export const staffMembers = [
-  { id: "S001", name: "介護 花子", role: "夜勤職員" },
-  { id: "S002", name: "支援 太郎", role: "日勤職員" },
+  { id: "S001", name: "介護 花子", role: "世話人" },
+  { id: "S002", name: "支援 太郎", role: "世話人" },
   { id: "S003", name: "施設 次郎", role: "管理者" },
   { id: "S004", name: "相談 恵美", role: "サービス管理責任者" },
 ];
