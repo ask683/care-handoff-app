@@ -176,10 +176,6 @@ export default function UserDetail() {
                 <div className="handoff-meta">入力者: {r.author}</div>
                 <div className="handoff-field"><b>夜間状況:</b> {r.nightCondition}</div>
                 <div className="handoff-field"><b>睡眠:</b> {r.sleep}</div>
-                <div className="handoff-field"><b>体調:</b> {r.physicalCondition}</div>
-                <div className="handoff-field"><b>服薬:</b> {r.medicationStatus}</div>
-                <div className="handoff-field"><b>排泄:</b> {r.excretion}</div>
-                <div className="handoff-field"><b>食事:</b> {r.meal}</div>
                 <div className="handoff-field"><b>特記事項:</b> {r.notes}</div>
                 <div className="handoff-field"><b>日勤への依頼:</b> {r.dayShiftRequest}</div>
               </div>

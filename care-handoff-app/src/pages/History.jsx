@@ -19,20 +19,19 @@ export default function History() {
     const k = keyword.trim();
     return sorted.filter((r) => {
       const user = users.find((u) => u.id === r.userId);
-      const haystack = [user?.name, r.notes, r.dayShiftRequest, r.physicalCondition, r.author].join(" ");
+      const haystack = [user?.name, r.notes, r.dayShiftRequest, r.author].join(" ");
       return haystack.includes(k);
     });
   }, [keyword, handoffRecords, users]);
 
   function exportCsv() {
-    const header = ["日付", "シフト", "利用者", "入力者", "夜間状況", "睡眠", "体調", "服薬", "排泄", "食事", "特記事項", "日勤への依頼"];
+    const header = ["日付", "シフト", "利用者", "入力者", "夜間状況", "睡眠", "特記事項", "日勤への依頼"];
     const rows = [header];
     for (const r of results) {
       const user = users.find((u) => u.id === r.userId);
       rows.push([
         r.date, r.shift, user?.name ?? r.userId, r.author,
-        r.nightCondition, r.sleep, r.physicalCondition, r.medicationStatus,
-        r.excretion, r.meal, r.notes, r.dayShiftRequest,
+        r.nightCondition, r.sleep, r.notes, r.dayShiftRequest,
       ]);
     }
     const csv = "﻿" + rows.map((row) => row.map(csvEscape).join(",")).join("\r\n");

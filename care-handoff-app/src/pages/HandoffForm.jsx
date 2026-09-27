@@ -18,10 +18,6 @@ export default function HandoffForm() {
     shift: "夜勤",
     nightCondition: "",
     sleep: "良好",
-    physicalCondition: "",
-    medicationStatus: "",
-    excretion: "",
-    meal: "",
     notes: "",
     dayShiftRequest: "",
   });
@@ -69,22 +65,6 @@ export default function HandoffForm() {
               <option>やや浅い</option>
               <option>不良</option>
             </select>
-          </div>
-          <div className="form-field">
-            <label>体調</label>
-            <textarea value={form.physicalCondition} onChange={(e) => update("physicalCondition", e.target.value)} placeholder="体温、顔色、その他気になる様子" />
-          </div>
-          <div className="form-field">
-            <label>服薬状況</label>
-            <input type="text" value={form.medicationStatus} onChange={(e) => update("medicationStatus", e.target.value)} placeholder="例: 服薬確認済み" />
-          </div>
-          <div className="form-field">
-            <label>排泄状況</label>
-            <input type="text" value={form.excretion} onChange={(e) => update("excretion", e.target.value)} placeholder="例: 普通便1回" />
-          </div>
-          <div className="form-field">
-            <label>食事状況</label>
-            <input type="text" value={form.meal} onChange={(e) => update("meal", e.target.value)} placeholder="例: 夕食完食" />
           </div>
           <div className="form-field">
             <label>特記事項</label>
