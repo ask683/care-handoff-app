@@ -206,7 +206,7 @@ export default function UserDetail() {
 
         {!canEdit && (
           <p className="note" style={{ marginTop: "1rem", color: "#888", fontSize: "0.8rem" }}>
-            ※ 一般職員は閲覧のみです。編集は管理者・サービス管理責任者が行えます。
+            ※ 申し送り・ヒヤリハットの記録は全職員が行えます。基本情報・計画書PDFの編集は管理者・サービス管理責任者のみです。
           </p>
         )}
       </main>
