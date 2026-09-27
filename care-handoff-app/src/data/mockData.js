@@ -1,10 +1,9 @@
 // サンプルデータ(実データ接続前のUI確認用。氏名・情報はすべて架空です)
 
 export const staffMembers = [
-  { id: "S001", name: "介護 花子", role: "世話人" },
-  { id: "S002", name: "支援 太郎", role: "世話人" },
-  { id: "S003", name: "施設 次郎", role: "管理者" },
-  { id: "S004", name: "相談 恵美", role: "サービス管理責任者" },
+  { id: "S001", role: "世話人" },
+  { id: "S002", role: "管理者" },
+  { id: "S003", role: "サービス管理責任者" },
 ];
 
 // 建物内のユニット(生活単位)
@@ -352,7 +351,7 @@ export const handoffRecords = [
     userId: "U001",
     date: "2026-09-27",
     shift: "夜勤",
-    author: "介護 花子",
+    author: "世話人",
     nightCondition: "22:30就寝。夜間2回トイレ覚醒あり、その後は良眠。",
     sleep: "良好",
     physicalCondition: "体温36.4℃、平熱。特に変化なし。",
@@ -367,7 +366,7 @@ export const handoffRecords = [
     userId: "U001",
     date: "2026-09-26",
     shift: "夜勤",
-    author: "介護 花子",
+    author: "世話人",
     nightCondition: "特に問題なく就寝。",
     sleep: "良好",
     physicalCondition: "変化なし",
@@ -382,7 +381,7 @@ export const handoffRecords = [
     userId: "U002",
     date: "2026-09-27",
     shift: "夜勤",
-    author: "支援 太郎",
+    author: "世話人",
     nightCondition: "予定通り21:30就寝。",
     sleep: "良好",
     physicalCondition: "良好",
@@ -397,7 +396,7 @@ export const handoffRecords = [
     userId: "U004",
     date: "2026-09-27",
     shift: "夜勤",
-    author: "介護 花子",
+    author: "世話人",
     nightCondition: "22:00就寝。夜間トイレ移動時にふらつきあり、見守りにて対応。",
     sleep: "やや浅い",
     physicalCondition: "体温36.6℃",
@@ -415,7 +414,7 @@ export const incidentRecords = [
     id: "I001",
     userId: "U004",
     date: "2026-09-25",
-    reporter: "介護 花子",
+    reporter: "世話人",
     detail: "夜間トイレ移動中、廊下でふらつき壁に手をついた。転倒には至らず。",
     action: "以後、夜間のトイレ移動は職員が付き添うこととした。",
   },

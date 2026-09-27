@@ -21,7 +21,7 @@ export default function IncidentForm() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    addIncident({ ...form, userId, reporter: currentStaff?.name || "不明" });
+    addIncident({ ...form, userId, reporter: currentStaff?.role || "不明" });
     navigate(`/users/${userId}`);
   }
 

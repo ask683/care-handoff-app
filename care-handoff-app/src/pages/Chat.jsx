@@ -20,7 +20,7 @@ export default function Chat() {
   function send(text) {
     const t = text.trim();
     if (!t) return;
-    askQuestion(t, currentStaff?.name);
+    askQuestion(t, currentStaff?.role);
     setInput("");
     // 送信後にキーボードを閉じる(開いたままだと、他の画面へ移動する際に
     // 1回目のタップがキーボードを閉じるだけになり、移動できないように見えるため)

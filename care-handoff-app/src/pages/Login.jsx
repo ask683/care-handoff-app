@@ -24,7 +24,7 @@ export default function Login() {
             <select id="staff" value={staffId} onChange={(e) => setStaffId(e.target.value)}>
               {staffMembers.map((s) => (
                 <option key={s.id} value={s.id}>
-                  {s.name}({s.role})
+                  {s.role}
                 </option>
               ))}
             </select>

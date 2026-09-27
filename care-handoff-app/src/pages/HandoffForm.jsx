@@ -32,7 +32,7 @@ export default function HandoffForm() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    addHandoff({ ...form, userId, author: currentStaff?.name || "不明" });
+    addHandoff({ ...form, userId, author: currentStaff?.role || "不明" });
     navigate(`/users/${userId}`);
   }
 
@@ -56,7 +56,7 @@ export default function HandoffForm() {
           </div>
           <div className="form-field">
             <label>入力者</label>
-            <input type="text" value={currentStaff?.name || ""} disabled />
+            <input type="text" value={currentStaff?.role || ""} disabled />
           </div>
           <div className="form-field">
             <label>夜間状況</label>

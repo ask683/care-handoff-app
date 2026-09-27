@@ -18,7 +18,7 @@ export default function Settings({ fontScale, setFontScale }) {
       <main className="app-main">
         <div className="info-card">
           <p className="section-title">ログイン中の職員</p>
-          <p>{currentStaff?.name}({currentStaff?.role})</p>
+          <p>{currentStaff?.role}</p>
         </div>
 
         <div className="info-card">
