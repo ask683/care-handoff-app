@@ -1,9 +1,11 @@
 :root {
-  --bread-brown: #8a5a34;
-  --bread-dark: #4a2e1f;
-  --cream: #fdf6ec;
-  --accent: #e8934a;
-  --text: #3b2a20;
+  --ivory: #f4ecdd;
+  --paper: #efe3cd;
+  --brown-deep: #3d2b20;
+  --brown: #6b4a34;
+  --wine: #7c2d3a;
+  --gold: #b08d57;
+  --text: #3a2c22;
 }
 
 * {
@@ -13,120 +15,239 @@
 }
 
 body {
-  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  font-family: "Noto Serif JP", "Hiragino Mincho ProN", serif;
   color: var(--text);
-  background: var(--cream);
-  line-height: 1.7;
+  background: var(--ivory);
+  line-height: 1.8;
+}
+
+img {
+  filter: sepia(0.18) saturate(0.9) contrast(0.97);
 }
 
 .hero {
   background-size: cover;
   background-position: center;
-  color: #fff;
-  padding-bottom: 4rem;
+  color: #fdf6ea;
+  padding-bottom: 5rem;
+  border-bottom: 6px double var(--gold);
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.2rem 2rem;
+  padding: 1.4rem 2rem;
   flex-wrap: wrap;
 }
 
 .logo {
   font-size: 1.4rem;
-  font-weight: bold;
+  font-weight: 500;
+  letter-spacing: 0.05em;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 1.5rem;
+  gap: 1.6rem;
   flex-wrap: wrap;
 }
 
 .nav-links a {
-  color: #fff;
+  color: #f4ecdd;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
 }
 
 .nav-links a:hover {
-  text-decoration: underline;
+  border-color: var(--gold);
 }
 
 .hero-content {
   max-width: 700px;
-  margin: 3rem auto 0;
+  margin: 3.5rem auto 0;
   text-align: center;
   padding: 0 1.5rem;
 }
 
+.eyebrow {
+  font-family: "EB Garamond", serif;
+  font-style: italic;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.eyebrow.center {
+  text-align: center;
+}
+
 .hero-content h1 {
-  font-size: 2.2rem;
-  margin-bottom: 1rem;
+  font-size: 2.3rem;
+  font-weight: 500;
+  margin-bottom: 1.2rem;
 }
 
 .hero-content p {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   margin-bottom: 2rem;
-  opacity: 0.95;
+  opacity: 0.92;
 }
 
 .cta-button {
   display: inline-block;
-  background: #fff;
-  color: var(--bread-brown);
-  padding: 0.8rem 2rem;
-  border-radius: 999px;
+  background: transparent;
+  color: #fdf6ea;
+  border: 1px solid var(--gold);
+  padding: 0.8rem 2.2rem;
   text-decoration: none;
-  font-weight: bold;
-  transition: transform 0.2s ease;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .cta-button:hover {
-  transform: translateY(-2px);
+  background: var(--gold);
+  color: var(--brown-deep);
 }
 
 .section {
-  padding: 4rem 1.5rem;
+  padding: 5rem 1.5rem;
 }
 
 .container {
-  max-width: 900px;
+  max-width: 940px;
   margin: 0 auto;
 }
 
 .section h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  color: var(--bread-dark);
-  border-bottom: 3px solid var(--accent);
-  display: inline-block;
-  padding-bottom: 0.3rem;
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin-bottom: 1.6rem;
+  color: var(--brown-deep);
 }
 
-.about {
+.center-heading {
+  text-align: center;
+}
+
+.section h2::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--gold);
+  margin-top: 0.7rem;
+}
+
+.center-heading::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 店主紹介 */
+.owner {
+  background: var(--paper);
+}
+
+.owner-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.owner-photo img {
+  width: 100%;
+  border: 8px solid #fff;
+  outline: 1px solid var(--gold);
+  outline-offset: -6px;
+  box-shadow: 0 8px 20px rgba(61, 43, 32, 0.2);
+  object-fit: cover;
+  aspect-ratio: 4 / 5;
+}
+
+.photo-caption {
+  text-align: center;
+  margin-top: 0.9rem;
+  font-family: "EB Garamond", serif;
+  font-style: italic;
+  color: var(--brown);
+  font-size: 0.95rem;
+}
+
+.owner-name {
+  font-weight: 700;
+  color: var(--wine);
+  margin-bottom: 1rem;
+  letter-spacing: 0.03em;
+}
+
+.owner-text p {
+  margin-bottom: 1rem;
+}
+
+/* こだわり */
+.commitment {
+  background: var(--ivory);
+}
+
+.commitment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.8rem;
+  margin-top: 2.2rem;
+}
+
+.commitment-card {
   background: #fff;
+  border: 1px solid #e3d5ba;
+  overflow: hidden;
 }
 
+.commitment-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
+.commitment-card h3 {
+  font-size: 1.05rem;
+  color: var(--brown-deep);
+  margin: 1.1rem 1.2rem 0.6rem;
+  font-weight: 500;
+}
+
+.commitment-card p {
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 0.86rem;
+  color: #6b5847;
+  margin: 0 1.2rem 1.3rem;
+  line-height: 1.7;
+}
+
+/* メニュー */
 .menu {
-  background: var(--cream);
+  background: var(--paper);
 }
 
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+  gap: 1.8rem;
+  margin-top: 2.2rem;
 }
 
 .menu-card {
   background: #fff;
-  border-radius: 12px;
+  border: 1px solid #e3d5ba;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(74, 46, 31, 0.08);
   text-align: center;
   transition: transform 0.2s ease;
 }
@@ -143,119 +264,57 @@ body {
 }
 
 .menu-card-body {
-  padding: 1.2rem 1.5rem 1.5rem;
+  padding: 1.3rem 1.5rem 1.6rem;
 }
 
 .menu-card h3 {
-  font-size: 1.1rem;
+  font-size: 1.08rem;
   margin-bottom: 0.6rem;
-  color: var(--bread-dark);
+  color: var(--brown-deep);
+  font-weight: 500;
 }
 
 .menu-card p {
-  font-size: 0.9rem;
-  color: #6b5443;
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 0.87rem;
+  color: #6b5847;
   margin-bottom: 1rem;
 }
 
 .price {
-  font-weight: bold;
-  color: var(--accent);
-  font-size: 1.05rem;
+  font-family: "EB Garamond", serif;
+  font-weight: 600;
+  color: var(--wine);
+  font-size: 1.1rem;
 }
 
-/* 店主紹介セクション */
-.owner {
-  background: #fff;
-}
-
-.owner-grid {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 2.5rem;
-  align-items: start;
-}
-
-.owner-photo img {
-  width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(74, 46, 31, 0.15);
-  object-fit: cover;
-  aspect-ratio: 1 / 1;
-}
-
-.owner-name {
-  font-weight: bold;
-  color: var(--bread-dark);
-  margin-bottom: 1rem;
-}
-
-.owner-text p {
-  margin-bottom: 1rem;
-}
-
-/* こだわりセクション */
-.commitment {
-  background: var(--cream);
-}
-
-.commitment-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.commitment-card {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(74, 46, 31, 0.08);
-}
-
-.commitment-card img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  display: block;
-}
-
-.commitment-card h3 {
-  font-size: 1.05rem;
-  color: var(--bread-dark);
-  margin: 1rem 1.2rem 0.5rem;
-}
-
-.commitment-card p {
-  font-size: 0.88rem;
-  color: #6b5443;
-  margin: 0 1.2rem 1.2rem;
-}
-
-/* カフェ&ランチセクション */
+/* カフェ&ランチ */
 .cafe {
-  background: #fff;
+  background: var(--ivory);
 }
 
 .cafe-grid {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
-  gap: 2.5rem;
+  gap: 3rem;
   align-items: start;
 }
 
 .cafe-photo img {
   width: 100%;
-  border-radius: 12px;
+  border: 8px solid #fff;
+  outline: 1px solid var(--gold);
+  outline-offset: -6px;
   object-fit: cover;
-  box-shadow: 0 6px 16px rgba(74, 46, 31, 0.12);
+  box-shadow: 0 8px 20px rgba(61, 43, 32, 0.18);
 }
 
 .cafe-text h3 {
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--bread-dark);
+  margin-top: 1.7rem;
+  margin-bottom: 1.1rem;
+  color: var(--brown-deep);
   font-size: 1.15rem;
+  font-weight: 500;
 }
 
 .lunch-list {
@@ -266,26 +325,95 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px dashed #d8c6a3;
 }
 
 .lunch-list img {
   width: 64px;
   height: 64px;
-  border-radius: 8px;
+  border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  border: 2px solid #fff;
+  outline: 1px solid var(--gold);
 }
 
 .lunch-list strong {
   display: block;
-  color: var(--bread-dark);
+  color: var(--brown-deep);
   margin-bottom: 0.2rem;
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
 }
 
 .lunch-list span {
-  font-size: 0.88rem;
-  color: #6b5443;
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 0.86rem;
+  color: #6b5847;
+}
+
+.hours {
+  background: var(--paper);
+}
+
+.hours-table {
+  border-collapse: collapse;
+  margin-top: 1.2rem;
+  width: 100%;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hours-table th,
+.hours-table td {
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid #d8c6a3;
+  text-align: left;
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 0.92rem;
+}
+
+.hours-table th {
+  color: var(--wine);
+  font-weight: 600;
+}
+
+.note {
+  margin-top: 1.3rem;
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 0.83rem;
+  color: #8a7660;
+  text-align: center;
+}
+
+.cafe .note {
+  text-align: left;
+}
+
+.access {
+  background: var(--ivory);
+  text-align: center;
+}
+
+.access p {
+  margin-bottom: 0.5rem;
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+.footer {
+  background: var(--brown-deep);
+  color: #f4ecdd;
+  text-align: center;
+  padding: 2.2rem 1.5rem;
+}
+
+.footer-note {
+  margin-top: 0.6rem;
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 0.78rem;
+  opacity: 0.65;
 }
 
 @media (max-width: 700px) {
@@ -294,59 +422,10 @@ body {
     grid-template-columns: 1fr;
   }
   .owner-photo img {
-    max-width: 220px;
+    max-width: 240px;
     margin: 0 auto;
     display: block;
   }
-}
-
-.hours {
-  background: #fff;
-}
-
-.hours-table {
-  border-collapse: collapse;
-  margin-top: 1rem;
-  width: 100%;
-  max-width: 400px;
-}
-
-.hours-table th,
-.hours-table td {
-  padding: 0.7rem 1rem;
-  border-bottom: 1px solid #e6dcd0;
-  text-align: left;
-}
-
-.hours-table th {
-  color: var(--bread-dark);
-}
-
-.note {
-  margin-top: 1.2rem;
-  font-size: 0.85rem;
-  color: #8a7562;
-}
-
-.access {
-  background: var(--cream);
-}
-
-.access p {
-  margin-bottom: 0.5rem;
-}
-
-.footer {
-  background: var(--bread-dark);
-  color: #fff;
-  text-align: center;
-  padding: 2rem 1.5rem;
-}
-
-.footer-note {
-  margin-top: 0.6rem;
-  font-size: 0.8rem;
-  opacity: 0.7;
 }
 
 @media (max-width: 600px) {
