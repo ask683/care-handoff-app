@@ -54,6 +54,12 @@ export default function Chat() {
               ))}
             </div>
           )}
+
+          {messages.length > 1 && (
+            <button className="big-btn secondary" style={{ marginTop: "1rem" }} onClick={resetChat}>
+              ← 質問一覧に戻る
+            </button>
+          )}
           <div ref={scrollRef} />
         </div>
       </main>
