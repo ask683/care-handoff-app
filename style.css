@@ -1,0 +1,218 @@
+:root {
+  --bread-brown: #8a5a34;
+  --bread-dark: #4a2e1f;
+  --cream: #fdf6ec;
+  --accent: #e8934a;
+  --text: #3b2a20;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  color: var(--text);
+  background: var(--cream);
+  line-height: 1.7;
+}
+
+.hero {
+  background: linear-gradient(135deg, var(--bread-brown), var(--accent));
+  color: #fff;
+  padding-bottom: 4rem;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2rem;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+.hero-content {
+  max-width: 700px;
+  margin: 3rem auto 0;
+  text-align: center;
+  padding: 0 1.5rem;
+}
+
+.hero-content h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.cta-button {
+  display: inline-block;
+  background: #fff;
+  color: var(--bread-brown);
+  padding: 0.8rem 2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+}
+
+.section {
+  padding: 4rem 1.5rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--bread-dark);
+  border-bottom: 3px solid var(--accent);
+  display: inline-block;
+  padding-bottom: 0.3rem;
+}
+
+.about {
+  background: #fff;
+}
+
+.menu {
+  background: var(--cream);
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.menu-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(74, 46, 31, 0.08);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-4px);
+}
+
+.menu-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.menu-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.6rem;
+  color: var(--bread-dark);
+}
+
+.menu-card p {
+  font-size: 0.9rem;
+  color: #6b5443;
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-weight: bold;
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+
+.hours {
+  background: #fff;
+}
+
+.hours-table {
+  border-collapse: collapse;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.hours-table th,
+.hours-table td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #e6dcd0;
+  text-align: left;
+}
+
+.hours-table th {
+  color: var(--bread-dark);
+}
+
+.note {
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  color: #8a7562;
+}
+
+.access {
+  background: var(--cream);
+}
+
+.access p {
+  margin-bottom: 0.5rem;
+}
+
+.footer {
+  background: var(--bread-dark);
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+
+.footer-note {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .hero-content h1 {
+    font-size: 1.6rem;
+  }
+  .navbar {
+    flex-direction: column;
+    gap: 0.8rem;
+    text-align: center;
+  }
+}
