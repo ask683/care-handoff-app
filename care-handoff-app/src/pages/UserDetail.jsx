@@ -94,6 +94,7 @@ export default function UserDetail() {
               <div className="info-row"><dt>生年月日</dt><dd>{user.birthday}(満{calcAge(user.birthday)}歳)</dd></div>
               <div className="info-row"><dt>性別</dt><dd>{user.gender}</dd></div>
               <div className="info-row"><dt>本人の電話番号</dt><dd>{user.phone}</dd></div>
+              <div className="info-row"><dt>本人のメールアドレス</dt><dd>{user.email}</dd></div>
               <div className="info-row"><dt>障害区分</dt><dd>{user.disabilityCategory}</dd></div>
               <div className="info-row"><dt>支援区分</dt><dd>{user.supportLevel}</dd></div>
               <div className="info-row"><dt>入居日</dt><dd>{user.moveInDate}</dd></div>
@@ -104,6 +105,7 @@ export default function UserDetail() {
               <div className="info-row"><dt>日中活動先 連絡先</dt><dd>{user.dayActivityContact}</dd></div>
               <div className="info-row"><dt>通所曜日</dt><dd>{user.dayActivityDays}</dd></div>
               <div className="info-row"><dt>相談支援員</dt><dd>{user.careManager}</dd></div>
+              <div className="info-row"><dt>相談支援員のメールアドレス</dt><dd>{user.careManagerEmail}</dd></div>
               <div className="info-row"><dt>訪問看護連絡先</dt><dd>{user.visitingNurseContact}</dd></div>
               <div className="info-row"><dt>緊急連絡先</dt><dd>{user.emergencyContact}</dd></div>
             </dl>
